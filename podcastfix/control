@@ -1,0 +1,9 @@
+Package: com.bright.podcastfix
+Name: PodcastFix
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: BrightUX
+Author: BrightUX
+Section: Tweaks
