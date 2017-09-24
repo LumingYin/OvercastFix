@@ -1,10 +1,10 @@
-Package: com.bright.podcastfix
-Name: PodcastFix
+Package: com.brightux.overcastfix
+Name: Overcast 1.0.3 Compatibility Fix (Beta)
 Depends: mobilesubstrate
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Fixes Overcast 1.0.3 by rerouting API traffic and removing certificate pinning requirements. Removal of certificate pinning only affects Overcast and does not affect other system apps. Some features, such as displaying expanded podcast search entry may not work. You should register a new account to use with Overcast 1.0.3 instead of using your existing account. Using your existing account may cause the app to crash.
 Maintainer: BrightUX
 Author: BrightUX
 Section: Tweaks
-Version: 0.0.1-6+debug
+Version: 0.0.2-1+debug
 Installed-Size: 132

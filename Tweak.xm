@@ -118,13 +118,23 @@
 }
 + (id)_synchronousRequestWithMethod:(id)arg1 host:(id)arg2 controller:(id)arg3 action:(id)arg4 arguments:(id)arg5 requestBody:(id)arg6 sendToken:(BOOL)arg7 pin:(BOOL)arg8 apiError:(int *)arg9 connectionError:(id *)arg10 {
 	%log;
+	NSLog(@"Important: arguments is of type %@", [[arg6 class] description]);
 	NSString *newHost = @"api.overcast.fm";
 	NSString *newController = @"api3";
 	NSString *newAction = [NSString stringWithFormat:@"%@", arg4];
+	NSDictionary *requestDict = [arg6 mutableCopy];
+	NSLog(@"WE CARE: (BEFORE) requestDict is %@, %@", arg6, [arg6 description]);
 	if ([arg4 isEqualToString:@"sync_v2"]) {
 		newAction = @"sync";
+	} else if ([arg4 isEqualToString:@"items_for_feed"]) {
+		newAction = @"user_items_for_feed";
+		[requestDict setValue:@"-SNtL-IfQkd-keJ0817uhNK6j4q2QRZaW03xUl-v0PzlLcatqYJ7t7KUIpjtm-h5V-Xt-AdjtsaDZIVJ" forKey:@"u"];
+		[requestDict setValue:@"q50And" forKey:@"hash"];
+	} else if ([arg4 isEqualToString:@"login"]) {
+		newController = @"user_api";
 	}
-	return %orig(arg1, newHost, newController, newAction, arg5, arg6, arg7, arg8, arg9, arg10);
+	NSLog(@"WE CARE: (AFTER) requestDict is %@, %@", requestDict, [requestDict description]);
+	return %orig(arg1, newHost, newController, newAction, arg5, requestDict, arg7, NO, arg9, arg10);
 }
 + (id)sendSynchronousRequestWithMethod:(id)arg1 controller:(id)arg2 action:(id)arg3 arguments:(id)arg4 requestBody:(id)arg5 apiError:(int *)arg6 connectionError:(id *)arg7 {
 	%log;
@@ -132,13 +142,23 @@
 }
 + (id)_requestWithMethod:(id)arg1 host:(id)arg2 controller:(id)arg3 action:(id)arg4 arguments:(id)arg5 requestBody:(id)arg6 sendToken:(BOOL)arg7 {
 	%log;
+	NSLog(@"Important: arguments is of type %@", [[arg6 class] description]);
 	NSString *newHost = @"api.overcast.fm";
 	NSString *newController = @"api3";
 	NSString *newAction = [NSString stringWithFormat:@"%@", arg4];
+	NSDictionary *requestDict = [arg6 mutableCopy];
+	NSLog(@"WE CARE: (BEFORE) requestDict is %@, %@", requestDict, [requestDict description]);
 	if ([arg4 isEqualToString:@"sync_v2"]) {
 		newAction = @"sync";
+	} else if ([arg4 isEqualToString:@"items_for_feed"]) {
+		newAction = @"user_items_for_feed";
+		[requestDict setValue:@"-SNtL-IfQkd-keJ0817uhNK6j4q2QRZaW03xUl-v0PzlLcatqYJ7t7KUIpjtm-h5V-Xt-AdjtsaDZIVJ" forKey:@"u"];
+		[requestDict setValue:@"q50And" forKey:@"hash"];
+	} else if ([arg4 isEqualToString:@"login"]) {
+		newController = @"user_api";
 	}
-	return %orig(arg1, newHost, newController, newAction, arg5, arg6, arg7);
+	NSLog(@"WE CARE: (AFTER) requestDict is %@, %@", requestDict, [requestDict description]);
+	return %orig(arg1, newHost, newController, newAction, arg5, requestDict, arg7);
 }
 + (id)requestWithMethod:(id)arg1 controller:(id)arg2 action:(id)arg3 arguments:(id)arg4 requestBody:(id)arg5 {
 	%log;
@@ -159,9 +179,19 @@
 
 %end
 
+@interface OCFeed : NSObject
+@property(copy, nonatomic) NSString *language; // @synthesize language=_language;
+@end
 
-
-
+%hook OCAPIConnection
+- (void)setLanguage:(NSString *)language {
+	%log;
+	if (language == nil || language == [NSNull class]) {
+		return %orig(@"english");
+	}
+	return %orig(language);
+}
+%end
 
 // Hook SSLSetSessionOption()
 static OSStatus (*original_SSLSetSessionOption)(
