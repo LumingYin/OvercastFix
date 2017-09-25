@@ -1,21 +1,5 @@
 #import <Security/SecureTransport.h>
 
-@interface OCStoreRegionalDistrictAssistantManager : NSObject
-	@property(readonly, nonatomic) BOOL didPurchaseUnlockEverything;
-@end
-
-%hook OCStoreRegionalDistrictAssistantManager
-- (BOOL)didPurchaseUnlockEverything {
-	%log;
-	return YES;
-}
-
-- (BOOL)getDidPurchaseUnlockEverything {
-	%log;
-	return YES;
-}
-%end
-
 @interface OCAPIConnection : NSObject
 + (void)showRateLimitAlert;
 + (void)showSSLPinningAlert;
@@ -122,7 +106,22 @@
 	%log;
 	return %orig;
 }
+%end
 
+@interface OCStoreRegionalDistrictAssistantManager : NSObject
+	@property(readonly, nonatomic) BOOL didPurchaseUnlockEverything;
+@end
+
+%hook OCStoreRegionalDistrictAssistantManager
+- (BOOL)didPurchaseUnlockEverything {
+	%log;
+	return YES;
+}
+
+- (BOOL)getDidPurchaseUnlockEverything {
+	%log;
+	return YES;
+}
 %end
 
 @interface OCFeed : NSObject
