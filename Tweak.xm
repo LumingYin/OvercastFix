@@ -1,7 +1,3 @@
-// How to Hook with Logos
-// Hooks are written with syntax similar to that of an Objective-C @implementation.
-// You don't need to #include <substrate.h>, it will be done automatically, as will
-// the generation of a class list and an automatic constructor.
 #import <Security/SecureTransport.h>
 
 @interface OCStoreRegionalDistrictAssistantManager : NSObject
@@ -9,12 +5,6 @@
 @end
 
 %hook OCStoreRegionalDistrictAssistantManager
-
-// Hooking a class method
-+ (id)sharedInstance {
-	return %orig;
-}
-
 - (BOOL)didPurchaseUnlockEverything {
 	%log;
 	return YES;
@@ -23,50 +13,6 @@
 - (BOOL)getDidPurchaseUnlockEverything {
 	%log;
 	return YES;
-}
-
-// Hooking an instance method with an argument.
-// - (void)messageName:(int)argument {
-// 	%log; // Write a message about this call, including its class, name and arguments, to the system log.
-
-// 	%orig; // Call through to the original function with its original arguments.
-// 	%orig(nil); // Call through to the original function with a custom argument.
-
-// 	// If you use %orig(), you MUST supply all arguments (except for self and _cmd, the automatically generated ones.)
-// }
-
-// Hooking an instance method with no arguments.
-// - (id)noArguments {
-// 	%log;
-// 	id awesome = %orig;
-// 	[awesome doSomethingElse];
-
-// 	return awesome;
-// }
-
-// Always make sure you clean up after yourself; Not doing so could have grave consequences!
-%end
-
-
-@interface AFHTTPSessionManager : NSObject
-- (id)initWithBaseURL:(id)arg1 sessionConfiguration:(id)arg2;
-- (id)initWithSessionConfiguration:(id)arg1;
-- (id)initWithBaseURL:(id)arg1;
-@end
-
-
-%hook AFHTTPSessionManager
-- (id)initWithBaseURL:(id)arg1 sessionConfiguration:(id)arg2 {
-	%log;
-	return %orig(arg1, arg2);
-}
-- (id)initWithSessionConfiguration:(id)arg1 {
-	%log;
-	return %orig(arg1);
-}
-- (id)initWithBaseURL:(id)arg1 {
-	%log;
-	return %orig(arg1);
 }
 %end
 
@@ -88,34 +34,6 @@
 @end
 
 %hook OCAPIConnection
-+ (void)showRateLimitAlert {
-	%log;
-	return %orig;
-}
-+ (void)showSSLPinningAlert {
-	%log;
-	return %orig;
-}
-+ (void)showAPIErrorAlert {
-	%log;
-	return %orig;
-}
-+ (void)startITunesLookupRequestWithArguments:(id)arg1 completion:(id)arg2 {
-	%log;
-	return %orig;
-}
-+ (void)startITunesSearchRequestWithArguments:(id)arg1 completion:(id)arg2 {
-	%log;
-	return %orig;
-}
-+ (void)startStaticAPIRequestWithAction:(id)arg1 arguments:(id)arg2 completion:(id)arg3 {
-	%log;
-	return %orig;
-}
-+ (void)startRequestWithMethod:(id)arg1 controller:(id)arg2 action:(id)arg3 arguments:(id)arg4 requestBody:(id)arg5 completion:(id)arg6 {
-	%log;
-	return %orig;
-}
 + (id)_synchronousRequestWithMethod:(id)arg1 host:(id)arg2 controller:(id)arg3 action:(id)arg4 arguments:(id)arg5 requestBody:(id)arg6 sendToken:(BOOL)arg7 pin:(BOOL)arg8 apiError:(int *)arg9 connectionError:(id *)arg10 {
 	%log;
 	NSLog(@"Important: arguments is of type %@", [[arg6 class] description]);
@@ -159,6 +77,34 @@
 	}
 	NSLog(@"WE CARE: (AFTER) requestDict is %@, %@", requestDict, [requestDict description]);
 	return %orig(arg1, newHost, newController, newAction, arg5, requestDict, arg7);
+}
++ (void)showRateLimitAlert {
+	%log;
+	return %orig;
+}
++ (void)showSSLPinningAlert {
+	%log;
+	return %orig;
+}
++ (void)showAPIErrorAlert {
+	%log;
+	return %orig;
+}
++ (void)startITunesLookupRequestWithArguments:(id)arg1 completion:(id)arg2 {
+	%log;
+	return %orig;
+}
++ (void)startITunesSearchRequestWithArguments:(id)arg1 completion:(id)arg2 {
+	%log;
+	return %orig;
+}
++ (void)startStaticAPIRequestWithAction:(id)arg1 arguments:(id)arg2 completion:(id)arg3 {
+	%log;
+	return %orig;
+}
++ (void)startRequestWithMethod:(id)arg1 controller:(id)arg2 action:(id)arg3 arguments:(id)arg4 requestBody:(id)arg5 completion:(id)arg6 {
+	%log;
+	return %orig;
 }
 + (id)requestWithMethod:(id)arg1 controller:(id)arg2 action:(id)arg3 arguments:(id)arg4 requestBody:(id)arg5 {
 	%log;
